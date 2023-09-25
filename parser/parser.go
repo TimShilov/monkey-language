@@ -132,9 +132,6 @@ func (p *Parser) parseStatement() ast.Statement {
         return p.parseLetStatement()
     case token.RETURN:
         return p.parseReturnStatement()
-    case token.SEMICOLON:
-        // TODO: This is not in the book. Figure out if it is needed
-        return nil
     default:
         return p.parseExpressionStatement()
     }
@@ -150,10 +147,15 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
     if !p.expectPeek(token.ASSIGN) {
         return nil
     }
-    // TODO: We're skipping the expressions until we encounter a semicolon
-    for !p.curTokenIs(token.SEMICOLON) {
+
+    p.nextToken()
+
+    stmt.Value = p.parseExpression(LOWEST)
+
+    if p.peekTokenIs(token.SEMICOLON) {
         p.nextToken()
     }
+
     return stmt
 }
 
@@ -180,10 +182,11 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 
     p.nextToken()
 
-    // TODO: We're skipping the expressions until we encounter a semicolon
-    for !p.curTokenIs(token.SEMICOLON) {
+    stmt.ReturnValue = p.parseExpression(LOWEST)
+    if p.peekTokenIs(token.SEMICOLON) {
         p.nextToken()
     }
+
     return stmt
 }
 
