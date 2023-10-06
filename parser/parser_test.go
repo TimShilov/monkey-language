@@ -517,7 +517,7 @@ func TestStringLiteralExpression(t *testing.T) {
     l := lexer.New(input)
     p := New(l)
     program := p.ParseProgram()
-    checkParserErrors(t,p)
+    checkParserErrors(t, p)
 
     stmt := program.Statements[0].(*ast.ExpressionStatement)
     literal, ok := stmt.Expression.(*ast.StringLiteral)
