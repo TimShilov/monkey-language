@@ -3,7 +3,6 @@ package main
 import (
     "bufio"
     "fmt"
-    "io"
     "os"
     "os/user"
 
@@ -41,11 +40,7 @@ func main() {
             return
         }
 
-        evaluated := evaluator.Eval(program, env)
-        if evaluated != nil {
-            io.WriteString(out, evaluated.Inspect())
-            io.WriteString(out, "\n")
-        }
+        evaluator.Eval(program, env)
         return
     }
 
